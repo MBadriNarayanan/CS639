@@ -4,6 +4,7 @@ import pytest
 def pytest_sessionstart(session):
     """Hook to set the autograder module reference globally."""
     import autograder  # Import your autograder.py file
+
     session.config._autograder_module = autograder  # Set it in the config object
 
 
@@ -12,8 +13,8 @@ def pytest_runtest_makereport(item, call):
         outcome = call.excinfo is None
 
         # Access the question and test_scores from autograder.py using the item
-        test_scores = getattr(item.module, 'test_scores', {})
-        weights = getattr(item.module, 'weights', {})
+        test_scores = getattr(item.module, "test_scores", {})
+        weights = getattr(item.module, "weights", {})
 
         # question = item.funcargs.get('question')
         question = item.name.split("[")[-1][:-1]
@@ -47,8 +48,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
     terminalreporter.write_sep("=", "TEST SCORE SUMMARY")
 
     # Access test_scores and weights from the module
-    test_scores = getattr(config._autograder_module, 'test_scores', {})
-    weights = getattr(config._autograder_module, 'weights', {})
+    test_scores = getattr(config._autograder_module, "test_scores", {})
+    weights = getattr(config._autograder_module, "weights", {})
 
     total_score = sum(test_scores.values())
     max_score = sum(weights.values())
